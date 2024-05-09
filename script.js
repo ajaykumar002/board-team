@@ -41,11 +41,13 @@ $("#rotaryClubListSearch").change(function(){
 					rotarianRowCount++;
 				}
 				rotarianTableElement.find('tbody').html(rotarionHtml);
+				image();
 				$('.rotarianSearch').select2();
 				$('.rotarianDesignation').select2();
 		    	for(var col in data){
 		    		if (data.hasOwnProperty(col)) {
 		    			var index = parseInt(col)+1;
+		    			$("#team_member_id_"+index).val(data[col].id)
 		    			$("#rotarianSearch_"+index).val(data[col].member_id).trigger("change");	
 		    			$("#rotarian_club_name"+index).val(data[col].club_name).trigger("change");
 		    			$("#rotarian_call_name"+index).val(data[col].email_address).trigger("change");
@@ -64,6 +66,7 @@ $("#rotaryClubListSearch").change(function(){
 					rotarianRowCount++;
 				}
 				rotarianTableElement.find('tbody').html(rotarionHtml);
+				image();
 				$('.rotarianSearch').select2();
 				$('.rotarianDesignation').select2();
 	    	}
@@ -215,3 +218,16 @@ function toast(message) {
   	x.className = "show";
   	setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
+
+function image() {
+	$(".rotarion_image").on("change",function(e){
+		var file = e.target.files[0];
+		var maxSizeInBytes = 1024 * 1024; // 1 MB
+	    if (file && (file.size < maxSizeInBytes)) {
+	        alert("File size minimum the limit of 1 MB.");
+	        // Clear the selected file from the input element
+	        e.target.value = '';
+	    }
+	});
+} 
+	

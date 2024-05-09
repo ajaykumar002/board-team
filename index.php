@@ -642,7 +642,7 @@ $rotaryTeamsList = getRotaryTeams();
 	}
 
 	function getRotarianHTML(count, data = []) {
-		var rotarianOptionsHTML = "<option value =''>~~~ Select Rotarian ~~~</option>";
+		var rotarianOptionsHTML = "<option value =''>~~~ Select Rotarion ~~~</option>";
 		$.each(optionsvalues,function(index,value) {
 			rotarianOptionsHTML += "<option value='"+value.key+"'>"+value.value+"</option>";
 		});
