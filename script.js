@@ -1,5 +1,5 @@
 var optionsHTML = "";
-var data = userEnteredData;
+var data = [];
 
 var designation = {
 			1: "President",
@@ -19,31 +19,59 @@ var designation = {
 		}
 
 $("#rotaryClubListSearch").change(function(){
-
-	for (var key in designation) {
-			if (designation.hasOwnProperty(key)) {
-				for(var row in data){
-					if(data.hasOwnProperty(row)){
-						if( data[row].member_designation == designation[key]){
-							$("#rotarianSearch_"+key).val(data[row].member_id).trigger("change");
-							console.log(data[row].member_id);
-     						$("#rotarian_classfication"+key).val(data[row].classfication);
-						}
-					}
+	var team_id = $(this).val();
+	
+	$.ajax({
+		url:"ajax.php",
+		method:"post",
+		data:{
+			"target":"getTeamDetails",
+			"data":{"value":team_id}
+		},
+		success:function(res){
+			var result = JSON.parse(res);
+			var rotarianTableElement = $("#rotarianTable");
+			data = result.data;
+			var existTeamCount = $(data).length;
+			if(existTeamCount > 0){
+				rotarionHtml ="";
+				rotarianRowCount =1;
+				for(var i =0; i<existTeamCount;i++){
+					rotarionHtml +=getRotarianHTML(rotarianRowCount);
+					rotarianRowCount++;
 				}
-			}
-		}
-	var club = $(this).val();
-	var rotarianTableElement = $("#rotarianTable");
-	rotarionHtml ="";
-	rotarianRowCount =1
-	for(var i =0; i<10;i++){
-		rotarionHtml +=getRotarianHTML(rotarianRowCount);
-		rotarianRowCount++;
-	}
-	rotarianTableElement.find('tbody').html(rotarionHtml);
-	$('.rotarianSearch').select2();
-	$('.rotarianDesignation').select2();
+				rotarianTableElement.find('tbody').html(rotarionHtml);
+				$('.rotarianSearch').select2();
+				$('.rotarianDesignation').select2();
+		    	for(var col in data){
+		    		if (data.hasOwnProperty(col)) {
+		    			var index = parseInt(col)+1;
+		    			$("#rotarianSearch_"+index).val(data[col].member_id).trigger("change");	
+		    			$("#rotarian_club_name"+index).val(data[col].club_name).trigger("change");
+		    			$("#rotarian_call_name"+index).val(data[col].email_address).trigger("change");
+		    			$("#rotarian_mobile"+index).val(data[col].phone_number).trigger("change");
+		    			$("#rotarian_designation"+index).val(data[col].member_designation).trigger("change");
+		    			$("#rotarian_classfication"+index).val(data[col].classfication).trigger("change");
+		    			$("#team_member_id_"+index).val(data[col].id).trigger("change");		    			
+		    		}
+		    	}
+	    	}else{
+	    		
+				rotarionHtml ="";
+				rotarianRowCount =1;
+				for(var i =0; i<10;i++){
+					rotarionHtml +=getRotarianHTML(rotarianRowCount);
+					rotarianRowCount++;
+				}
+				rotarianTableElement.find('tbody').html(rotarionHtml);
+				$('.rotarianSearch').select2();
+				$('.rotarianDesignation').select2();
+	    	}
+	    }
+			
+	});
+	
+	
 	
 	/*$.ajax({
 		url:"ajax.php",
@@ -166,6 +194,7 @@ $("#rotarianRegister").on("submit",function(e){
 		}
 	});
 });
+
 
 function messagevalidation(data){
 	$.each(data,function(finder,error){

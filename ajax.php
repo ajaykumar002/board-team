@@ -26,6 +26,9 @@ switch ($method) {
 	case 'userValid':
 		echo json_encode(checkUserValid($getData['value']));
 		break;
+	case 'getTeamDetails':
+		echo json_encode(getRotarianTeamDetails($getData['value']));
+		break;
 	default:
 		return print("Undefined function...");
 		break;

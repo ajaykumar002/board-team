@@ -286,22 +286,22 @@
 		}
 	}
 
-	function fetchRotarianTeamDetails($username){
+	function fetchRotarianTeamDetails($team_id){
 		$sql = "SELECT 
 					* 
 				FROM rotary_team_members rtm
 				LEFT JOIN rotary_members_new rm
 				ON rm.member_id = rtm.member_id
-				WHERE rtm.creator_mobile = '".$username."'";
+				WHERE rtm.team_id = '".$team_id."'";
 		$result = $GLOBALS['conn']->query($sql);
 		if ($result->num_rows > 0) {
 		  // output data of each row
 		  	while($row = $result->fetch_assoc()) {
 		    	$data[] = $row;
 		  	}
-		  	return array("status"=>"success","message"=>"User is there given number.","data"=>$data);
+		  	return array("status"=>"success","message"=>"Successfully fetched given team details.","data"=>$data);
 		} else {
-		 	return array("status"=>"success","message"=>"User does not exist","data"=>[]);
+		 	return array("status"=>"failed","message"=>"Team does not decleared","data"=>[]);
 		}
 
 	}

@@ -478,7 +478,6 @@ $rotaryTeamsList = getRotaryTeams();
 <script type="text/javascript">
 	var userEnteredData = <?php echo json_encode($rotarian_team_details); ?>;
 	var optionsvalues = <?php echo json_encode($rotarian_list); ?>;
-	console.log(optionsvalues);
 	var rowHtml = "";
 	var rotarianRowCount = 1;
 	var annRowCount = 1;
@@ -602,7 +601,6 @@ $rotaryTeamsList = getRotaryTeams();
 
 		$(".rotarianDesignation").on("change",function(){
 			var val = $(this).val();
-			console.log(val);
 			if(val == 'Others'){
 				var dataElement = $(this).closest("td");
 				dataElement.html("<input type='text' class ='form-control textBox'>");
@@ -662,7 +660,7 @@ $rotaryTeamsList = getRotaryTeams();
 
 		rotarianRowHtml += "</select>\
 						</td>\
-						<td><input class='form-control form-control-sm' style='inline-size: fit-content;' type='file' name='rotarion_image[]' id='rotarian_image_" + count + "' accept='image/*'></td>\
+						<td><input class='form-control form-control-sm rotarion_image' style='inline-size: fit-content;' type='file' name='rotarion_image[]' id='rotarian_image_" + count + "' accept='image/*'></td>\
 						<td><input type='text' class='club_name form-control textBox disabled' name='rotarian_clubName[]'id='rotarian_club_name" + count + "'></td>\
 						<td><input type='text' class='rotarian_call_name form-control textBox disabled' name='rotarian_call_name[]'id='rotarian_call_name" + count + "'></td>\
 						<td><input type='text' class='mobile form-control textBox' name='rotarian_mobile[]'id='rotarian_mobile" + count + "'></td>\
@@ -735,7 +733,6 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 
 	function resetRotarian() {
 		$(".rotarianSearch").on("change",function() {
-			console.log("Ajay Member Change Event")
 			calculateMemberRegistrationFee();
 			var rotarianMemberId = $(this).val();
 			var element = $(this);
@@ -783,7 +780,6 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 		// var annetteTableElement = $("#annetteTable");
 		
 	    var existTeamCount = $(rotarianTeamDetails).length;
-	    console.log(rotarianTeamDetails);
 	    // if(existTeamCount > 0){
 
 	    	// $("#rotaryClubListSearch").val(rotarianTeamDetails[0].team_id).trigger("change");
@@ -832,6 +828,16 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 		$('.registerer_name').select2();*/
 		/*$('.rotarianCollarSize').select2();
 		$('.annCollarSize').select2();*/
+
+		$(".rotarion_image").on("change",function(e){
+			var file = e.target.files[0];
+			var maxSizeInBytes = 1024 * 1024; // 1 MB
+		    if (file && (file.size < maxSizeInBytes)) {
+		        alert("File size minimum the limit of 1 MB.");
+		        // Clear the selected file from the input element
+		        e.target.value = '';
+		    }
+		});
 		
 		
 	});

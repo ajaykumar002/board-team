@@ -168,7 +168,7 @@
 					"creator_mobile"=> $_SESSION['username'],
 					"member_designation" => $formData['rotarian_designation'][$i],
 					"classfication" => $formData['rotarian_classfication'][$i],
-					"file_name" => basename($image["name"]),
+					"file_name" => basename($image["name"][$i]),
 					"file_path" => $targetFile
 				];
 			}
@@ -276,8 +276,8 @@
 		}
 	}
 
-	function getRotarianTeamDetails($username){
-		$data = fetchRotarianTeamDetails($username);
+	function getRotarianTeamDetails($team_id){
+		$data = fetchRotarianTeamDetails($team_id);
 		return $data;
 	}
 

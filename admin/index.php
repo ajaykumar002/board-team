@@ -116,9 +116,7 @@
 		    		success: function (response) {
 		    			var result = JSON.parse(response);
 		    			result = JSON.parse(result);
-		    			console.log(result);
 		    			if(result.status == "success"){
-		    				console.log(result);
 		    				if(result.data[0]){
 		    					sendOtp();
 		    					var msg = "OTP sending...";
