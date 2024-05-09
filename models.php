@@ -1,18 +1,19 @@
 <?php
 	include 'db.php';
 
-	function fetchRotariansList($club_value)
+	function fetchRotariansList($club_value = "")
 	{
 		
 		$data = [];
-		$where = "club_name = '".$club_value."'";
+		$where = "";
+		if($club_value != "")
+			$where = "WHERE club_name = '".$club_value."'";
 		$sql = "SELECT 
 					member_id,
 					full_name,
 					phone_number 
 				FROM rotary_members_new
-				
-				WHERE ".$where." order by full_name";
+				".$where." order by full_name";
 		$result = $GLOBALS['conn']->query($sql);
 
 		if ($result->num_rows > 0) {
@@ -43,6 +44,24 @@
 		}
 	}
 
+	function fetchRotaryTeamsList()
+	{
+		$data = [];
+		$sql = "SELECT id,team_name FROM rotary_team";
+		$result = $GLOBALS['conn']->query($sql);
+
+		if ($result->num_rows > 0) {
+		  // output data of each row
+		  	while($row = $result->fetch_assoc()) {
+		    	$data[] = $row;
+		  	}
+		  	return $data;
+		} else {
+		  echo "0 results";
+		}
+	}
+
+
 	function fetchRotariansDetails($value)
 	{
 		$data =[];
@@ -55,8 +74,6 @@
 		    	$data[] = $row;
 		  	}
 		  	return $data[0];
-		} else {
-		  echo "0 results";
 		}
 	}
 
@@ -70,6 +87,33 @@
 			        message("Error: " . $sql . "<br>" . $GLOBALS['conn']->error);
 			    }
 			}
+		}
+	}
+
+	function insertRotarianTeamDetails($data){
+		$conn = $GLOBALS['conn'];
+		foreach ($data as $row) {
+			if($row['team_member_id'] == ""){
+				$sql =" INSERT INTO rotary_team_members (team_id, member_id, member_designation, creator_mobile, classfication,file_name,file_path) VALUES ('".$row['team_id']."','".$row['member_id']."','".$row['member_designation']."','".$row['creator_mobile']."','".$row['classfication']."','".$row['file_name']."','".$row['file_path']."')";
+			}else{
+				$sql = "
+					UPDATE rotary_team_members SET
+					team_id = '".$row['team_id']."',
+					member_id = '".$row['member_id']."',
+					classfication = '".$row['classfication']."',
+					member_designation = '".$row['member_designation']."',
+					creator_mobile = '".$row['creator_mobile']."',
+					file_name = '".$row['file_name']."',
+					file_path = '".$row['file_path']."',
+					date_madified = '".date('Y-m-d H:i:s')."'
+					WHERE id = '".$row['team_member_id']."'
+				";
+			}
+			
+
+			if ($conn->query($sql) !== TRUE) {
+		        message("Error: " . $sql . "<br>" . $conn->error);
+		    }
 		}
 	}
 	function insertTransactionDetails($data){
@@ -196,5 +240,91 @@
 		  	return $data;
 		} else {
 		  echo "0 results";
+		}
+	}
+
+	function insertSpouseDetails($data){
+
+		if(count(getRotarianSpouseDetails($data['rotarian_id'])) > 0){
+			$sql = "UPDATE rotary_spouse_details 
+			SET 
+				spouse_name='".$data['spouse_name']."',
+				spouse_dob ='".$data['spouse_dob']."',
+				member_dob ='".$data['rotarion_dob']."',
+				wedding_anniversary = '".$data['wedding_anniversary']."',
+				spouse_email = '".$data['spouse_email']."',
+				spouse_phone = '".$data['spouse_phone']."'
+			WHERE member_id = '".$data['rotarian_id']."'";
+		}else{
+
+	    	$sql = "INSERT INTO rotary_spouse_details (member_id, spouse_name,spouse_dob, member_dob, wedding_anniversary, spouse_email,spouse_phone) VALUES ('".$data['rotarian_id']."','".$data['spouse_name']."','".$data['spouse_dob']."','".$data['rotarion_dob']."','".$data['wedding_anniversary']."','".$data['spouse_email']."','".$data['spouse_phone']."')";
+		}
+		
+	    if ($GLOBALS['conn']->query($sql) !== TRUE) {
+	        message("Error: " . $sql . "<br>" . $GLOBALS['conn']->error);
+	        return array("error"=>1,"message"=>"Faild insert data.");
+	    }else{
+	    	return array("error"=>0,"message"=>"record inserted successfully");
+	    }
+	}
+
+	function getRotarianSpouseDetails($rotarian_id)
+	{
+		$sql = "SELECT *
+				FROM rotary_spouse_details
+				WHERE member_id = '".$rotarian_id."'";
+
+		$result = $GLOBALS['conn']->query($sql);
+		if ($result->num_rows > 0) {
+		  // output data of each row
+		  	while($row = $result->fetch_assoc()) {
+		    	$data[] = $row;
+		  	}
+		  	return $data;
+		} else {
+		  return [];
+		}
+	}
+
+	function fetchRotarianTeamDetails($username){
+		$sql = "SELECT 
+					* 
+				FROM rotary_team_members rtm
+				LEFT JOIN rotary_members_new rm
+				ON rm.member_id = rtm.member_id
+				WHERE rtm.creator_mobile = '".$username."'";
+		$result = $GLOBALS['conn']->query($sql);
+		if ($result->num_rows > 0) {
+		  // output data of each row
+		  	while($row = $result->fetch_assoc()) {
+		    	$data[] = $row;
+		  	}
+		  	return array("status"=>"success","message"=>"User is there given number.","data"=>$data);
+		} else {
+		 	return array("status"=>"success","message"=>"User does not exist","data"=>[]);
+		}
+
+	}
+
+	function getUserDetailsByPhone($mobile_no)
+	{
+		$data =[];
+		$sql ="
+				SELECT 
+				*
+				FROM rotary_members_new rmn
+				LEFT JOIN register_event re
+				ON rmn.member_id = re.name
+				WHERE rmn.phone_number = '${mobile_no}'";
+    	$result = $GLOBALS['conn']->query($sql);
+
+		if ($result->num_rows > 0) {
+		  // output data of each row
+		  	while($row = $result->fetch_assoc()) {
+		    	$data[] = $row;
+		  	}
+		  	return array("status"=>"success","message"=>"User is there given number.","data"=>$data);
+		} else {
+		 	return array("status"=>"faild","message"=>"User does not exist");
 		}
 	}

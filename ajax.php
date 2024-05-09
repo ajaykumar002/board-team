@@ -17,6 +17,15 @@ switch ($method) {
 	case 'calculateMemberRegistrationFee':
 		echo json_encode(calculateMemberFees($getData['value']));
 		break;
+	case 'spouseFormSubmit':
+		echo json_encode(spouseFormSubmit($getData));
+		break;
+	case 'spouseFormDetails':
+		echo json_encode(spouseFormDetails($getData['value']));
+		break;
+	case 'userValid':
+		echo json_encode(checkUserValid($getData['value']));
+		break;
 	default:
 		return print("Undefined function...");
 		break;
@@ -36,43 +45,37 @@ function getRotariansDetails($value)
 
 function saveFormData($data, $getFormCal = false)
 {
-	$formData = [];
+	// $formData = [];
+	// print_r($data);die();
 	foreach ($data as $key => $value) {
 		// if($key != 'rotaryClubListSearch'){
 		$index = $key;
-		if ($key == 'receipt') {
-			$formData['receipt'] = $value;
+		if ($key == 'rotarion_image') {
+			$formData['rotarion_image'] = $value;
 		}
 		if (isset($formData[$index])) {
-			if (strpos($index, "rotarian_checkVeg") !== false) {
+			/*if (strpos($index, "rotarian_checkVeg") !== false) {
 				$formData["rotarian_checkVeg"][] = $value;
 			} elseif (strpos($index, "ann_checkVeg") !== false) {
 				$formData["ann_checkVeg"][] = $value;
 			} elseif (strpos($index, "annette_checkVeg") !== false) {
 				$formData["annette_checkVeg"][] = $value;
-			} else {
-				$formData[$index] = $value;
-			}
-		} else {
-			if (strpos($index, "rotarian_checkVeg") !== false) {
-				$formData["rotarian_checkVeg"][] = $value;
-			} elseif (strpos($index, "ann_checkVeg") !== false) {
-				$formData["ann_checkVeg"][] = $value;
-			} elseif (strpos($index, "annette_checkVeg") !== false) {
-				$formData["annette_checkVeg"][] = $value;
-			} else {
-				$formData[$index] = $value;
-			}
+			} else {*/
+			$formData[$index] = $value;
+			// }
+		}else{
+			$formData[$index] = $value;
 		}
 
 
 		// }
 
 	}
+	// print_r($formData);die();
 	if ($getFormCal) {
 		return $formData;
 	}
-	$result = formatAndInsertData($formData, $_FILES['receipt']);
+	$result = formatAndInsertData($formData, $_FILES['rotarion_image']);
 	if ($result["error"] == 1) {
 		return $result;
 	} else {
@@ -144,4 +147,41 @@ function formDataArrange($data)
 		}
 	}
 	return $formData;
+}
+
+function spouseFormSubmit($data){
+	$result = [];
+	$result = saveSpouseFormData($data);
+	return $result;
+}
+
+function spouseFormDetails($member_id){
+	return fetchRotarianSpouseInfo($member_id);
+}
+function checkUserValid($value){
+
+	$data = getUserDetailsByPhone($value);
+	$result = "";
+	if((isset($data['status'])) && ($data['status'] == "success")){
+		if(isset($data['data'][0])){
+			$user = $data['data'][0];
+			$user_role = $user["designation"];
+
+
+			if(($user_role == "President") || ($user_role == "Secretary")){
+				$result = json_encode(array("status"=>"success","message"=>"User is valid"));
+			}
+			else{
+				$result = json_encode(array("status"=>"faild","message"=>"invalid user"));
+			}
+
+		}else{
+			$result = json_encode(array("status"=>"faild","message"=>"User does not exist."));
+		}
+		
+	}else{
+		$result = json_encode($data);
+	}
+
+	return json_encode($data);
 }

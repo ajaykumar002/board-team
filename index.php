@@ -1,12 +1,20 @@
 <?php
 include('controller.php');
 $login = False;
+$teamExist =False;
 if (isset($_SESSION['username']) && isset($_SESSION['password'])) {
 	$login = True;
+	$rotarian_team_details = getRotarianTeamDetails($_SESSION['username']);
+	$teamExist =True;
+}else{
+	header("Location: admin/");
+    exit();
 }
 
 $rotarian_list = getRotarianList();
+// print_r($rotarian_list);
 $rotaryClubList = getRotaryClubs();
+$rotaryTeamsList = getRotaryTeams();
 ?>
 <html style="overflow-x:hidden">
 
@@ -17,10 +25,11 @@ $rotaryClubList = getRotaryClubs();
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
+	<link rel="stylesheet" href="src/font-awesome/css/font-awesome.min.css">
+
 	<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.css" rel="stylesheet" />
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.js"></script>
-	<script src="script.js"></script>
 </head>
 <style type="text/css">
 	@import url(//fonts.googleapis.com/css?family=Lato:300:400);
@@ -266,6 +275,7 @@ $rotaryClubList = getRotaryClubs();
 		/* Disable pointer events */
 		opacity: 0.5;
 	}
+
 </style>
 
 <body class="">
@@ -276,8 +286,7 @@ $rotaryClubList = getRotaryClubs();
 			<img class="logo" src="DistrictThemeLogo.svg">
 		</div>
 		<div>
-			<h3>RID 3234 District Training Assembly</h3>
-			<h5>April 27, 2024 @ Hotel Green Park, Vadapalani, Chennai</h5>
+			<h3>RID 3234 District Directory Details</h3>
 		</div>
 
 		<!--Waves Container-->
@@ -308,11 +317,11 @@ $rotaryClubList = getRotaryClubs();
 				<div class="form-group row">
 					<div class="col">
 						<label for="rotary_club_name" class="col-sm-2 col-form-label ">
-							<h5 class="required">Rotary Club of</h5>
+							<h5 class="required">Select Team</h5>
 						</label>
 						<select style="width: 100%" name="rotaryClubListSearch" id="rotaryClubListSearch" class="rotaryClubListSearch form-select">
 							<option value=""></option>
-							<?php foreach ($rotaryClubList as $option) { ?>
+							<?php foreach ($rotaryTeamsList as $option) { ?>
 								<option value="<?php echo $option['key']; ?>"><?php echo $option['value']; ?></option>
 							<?php } ?>
 						</select>
@@ -324,10 +333,10 @@ $rotaryClubList = getRotaryClubs();
 						<li class="nav-item" role="presentation">
 							<button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Board</button>
 						</li>
-						<li class="nav-item" role="presentation">
+						<!-- <li class="nav-item" role="presentation">
 							<button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#ann" type="button" role="tab" aria-controls="profile" aria-selected="false">Others</button>
 						</li>
-					</ul>
+ -->					</ul>
 
 					<div class="tab-content" id="myTabContent" style="overflow:auto">
 						<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -336,11 +345,13 @@ $rotaryClubList = getRotaryClubs();
 									<tr>
 										<th scope="col">Sl.No</th>
 										<th scope="col">Name</th>
-										<th scope="col">Call Name</th>
-										<th scope="col">Veg / Non-Veg</th>
+										<th scope="col">Photo</th>
+										<th scope="col">Club Name</th>
+										<th scope="col">E-Mail</th>
 										<th scope="col">Mobile</th>
 										<th scope="col">Designation</th>
-										<th scope="col">Collar Size</th>
+										<th scope="col">Classfication</th>
+										<th scope="col">Spouse Details</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -349,7 +360,7 @@ $rotaryClubList = getRotaryClubs();
 
 							</table>
 
-							<!-- <button type= "button" class="btn btn-info" id="add-rotrain" style="float: right;">Add</button> -->
+							
 
 						</div>
 						<div class="tab-pane fade"  style="overflow:auto" id="ann" role="tabpanel" aria-labelledby="profile-tab">
@@ -375,55 +386,9 @@ $rotaryClubList = getRotaryClubs();
 						</div>
 					</div>
 				</div>
+				<button type= "button" class="btn btn-info" id="add-rotrain" style="float: right;">Add</button>
 			</div>
-			<div style="padding-left: 3.5%;padding-right: 3.5%;overflow:auto">
-				<table class="table table-bordered table-hover" id="paymentTable">
-					<thead>
-						<tr>
-							<th scope="col">Category</th>
-							<th scope="col">Board (Per Club)</th>
-							<th scope="col">Addl. Rotarian (per Head)</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<th scope="row">Registration Charges for Board</th>
-							<td id="rotarianTotal">15000</td>
-							<td id="annTotal">1500</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div style="text-align: center;padding-left: 3.5%;padding-right: 3.5%">
-				<h5>Payment to be made in the form of Cheque / DD / NEFT / RTGS/UPI to</h5>
-				<h4>Shri Visual Systems. - GPay: 9940068357
-					Account No. 602305030162. ICICI Bank. IFSC Code: ICIC0006023</h4>
-				<hr>
-				<h4>PAYMENT DETAILS</h4>
-				<div style="text-align:left;">
-					<div class="row">
-						<div class="col-sm-4">
-							<div class="form-group disabled">
-								<label class="required" for="totalAmount">AMOUNT :</label>
-								<input type="text" class="form-control dotted" name="totalAmount" id="totalAmount">
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="transactionRef" class="required">CHEQUE No. / DD. No. / Transaction ID :</label>
-								<input type="text" class="form-control dotted" name="transactionRef" id="transactionRef">
-							</div>
-						</div>
-
-						<div class="col-sm-4">
-							<div class="form-group">
-								<label for="formFile" class="form-label required">Payment Confirmation </label>
-								<input class="form-control" type="file" name="receipt" id="formFile">
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			
 			<br>
 			<div class="row">
 				<div class="input-group" style="text-align: right;">
@@ -433,7 +398,7 @@ $rotaryClubList = getRotaryClubs();
 			<b>
 				<hr>
 			</b>
-			<div class="row" style="text-align: center;">
+			<!-- <div class="row" style="text-align: center;">
 				<div class="col-6">
 					<h4>For Registration Contact:</h4>
 					<h3> Rtn. Sriram Seshadri @ 9884017217</h3>
@@ -448,7 +413,7 @@ $rotaryClubList = getRotaryClubs();
 				</div>
 
 
-			</div>
+			</div> -->
 
 		</form>
 	</div>
@@ -456,17 +421,70 @@ $rotaryClubList = getRotaryClubs();
 		<!-- <div class="float-button btn btn-primary login" id="login"> Admin</div> -->
 	<?php } else { ?>
 		<div class="btn float-button login" id="logout">Exit</div>
-		<div class="btn float-button register" id="manage">manage</div>
 	<?php } ?>
 	<div class="loading"><img src="loading.gif" style="height: 40px;width: 40px;"></div>
+	<div class="modal fade" id="spouseModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  	<div class="modal-dialog modal-lg" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<h5 class="modal-title" id="exampleModalLabel">Spouse Details</h5>
+	        		<button type="button" class="modalCloseBtn" data-dismiss="modal" aria-label="Close">
+	          			<span aria-hidden="true">&times;</span>
+	        		</button>
+	      		</div>
+	      		<div class="modal-body">
+	        		<form id="spouse_form">
+	        			<input type="hidden" name="rotarion_id" id="rotarian_id"/>
+	        			<div class="row">
+	        				<div class="form-group col-lg-6 col-12">
+	        					<label for="spouse_name" class="required">Name</label>
+	        					<input type="text" class="form-control" name="spouse_name" id="spouse_name">
+	        				</div>
+	        				<div class="form-group col-lg-6 col-12">
+	        					<label for="spouse_dob" class="required">DOB</label>
+	        					<input type="date" class="form-control" name="spouse_dob" id="spouse_dob">
+	        				</div>
+	        			</div>
+	        			<div class="row">
+	        				<div class="form-group  col-lg-6 col-12">
+	        					<label for="rotarion_dob" class="required">Rotarion DOB</label>
+	        					<input type="date" class="form-control" name="rotarion_dob" id="rotarion_dob">
+	        				</div>
+	        				<div class="form-group col-lg-6 col-12">
+	        					<label for="wedding_anniversary" class="required">Wedding Anniversary</label>
+	        					<input type="date" class="form-control" name="wedding_anniversary" id="wedding_anniversary">
+	        				</div>
+	        			</div>
+	        			<div class="row">
+	        				<div class="form-group col-lg-6 col-12">
+	        					<label for="spouse_phone" class="required">Phone</label>
+	        					<input type="text" class="form-control" name="spouse_phone" id="spouse_phone">
+	        				</div>
+	        				<div class="form-group col-lg-6 col-12">
+	        					<label for="spouse_email" class="required">Email</label>
+	        					<input type="email" class="form-control" name="spouse_email" id="spouse_email">
+	        				</div>
+	        			</div>
+	        		</form>
+	      		</div>
+	      		<div class="modal-footer">
+	        		<button type="button" class="btn btn-secondary modalCloseBtn" data-dismiss="modal">Close</button>
+	        		<button type="button" class="btn btn-primary" id="spouseForm">Save</button>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
 </body>
 <script type="text/javascript">
+	var userEnteredData = <?php echo json_encode($rotarian_team_details); ?>;
 	var optionsvalues = <?php echo json_encode($rotarian_list); ?>;
+	console.log(optionsvalues);
 	var rowHtml = "";
 	var rotarianRowCount = 1;
 	var annRowCount = 1;
 	var annetteRowCount = 1;
 	var optionsHTML = "";
+
 	var collar_size = "<option value='0'>~~Select~~</option>\
 						<option value='1'>XS/34</option>\
 						<option value='2'>S/36</option>\
@@ -478,7 +496,120 @@ $rotaryClubList = getRotaryClubs();
 						<option value='8'>4XL/48</option>";
 	$(document).ready(function() {
 		$('.required').append("<span class='required-color'>*</span>");
+
+		
 		clearErrors();
+		/*$.ajax({
+			url:"ajax.php",
+			method:"post",
+			data:{
+				"target":"getRotarians",
+				"data":{"value":""}
+			},
+			success:function(res){
+				var data = JSON.parse(res);
+				if (data.status == "success") {
+					data = data.data;
+					var rotarianOptionsHTML = "<option value =''>~~~ Select Rotarian ~~~</option>";
+					$.each(data,function(index,value) {
+						rotarianOptionsHTML += "<option value='"+value.key+"'>"+value.value+"</option>";
+					});
+					optionsHTML = rotarianOptionsHTML;
+					$(".rotarianSearch").html(optionsHTML);
+					$(".registerer_name").html(optionsHTML);
+					$('.rotarianSearch').select2();
+					$('.registerer_name').select2();
+				}
+			}
+		});*/
+	});
+
+	$(document).on("ready",function(){
+		$(".editSpouseDetails").on("click",function(e){
+			e.preventDefault();
+			var rotarianValue = $(this).closest("tr").find(".rotarianSearch").val();
+
+			if(rotarianValue == ""){
+				alert("Select member "+($(this).closest("tr").find(".rotarianDesignation").val()));
+			}else{
+				resetSpouseForm();
+				clearErrors();
+				$("#spouseModel").modal("show");
+				$("#rotarian_id").val(rotarianValue)
+
+				$.ajax({
+					url:"ajax.php",
+					method:"post",
+					data:{
+						"target":"spouseFormDetails",
+						"data":{
+							"value":rotarianValue
+						}
+					},
+					success:function(res){
+
+						var response = JSON.parse(res);
+						if(response.status == "success"){
+							var data = response.data
+							$("#spouse_name").val(data.spouse_name);
+							$("#spouse_dob").val(data.spouse_dob);
+							$("#rotarion_dob").val(data.member_dob);
+							$("#wedding_anniversary").val(data.wedding_anniversary);
+							$("#spouse_phone").val(data.spouse_phone);
+							$("#spouse_email").val(data.spouse_email);
+						}
+						
+					}
+					
+				});
+			}
+			
+		});
+
+		$(".modalCloseBtn").on("click",function(){
+			$("#spouseModel").modal("hide");
+		});
+
+		$("#spouseForm").on("click",function(){
+			var form_data = {
+				"rotarian_id":$("#rotarian_id").val(),
+				"spouse_name":$("#spouse_name").val(),
+				"spouse_dob":$("#spouse_dob").val(),
+				"rotarion_dob":$("#rotarion_dob").val(),
+				"wedding_anniversary":$("#wedding_anniversary").val(),
+				"spouse_phone":$("#spouse_phone").val(),
+				"spouse_email":$("#spouse_email").val()
+			};
+
+			$.ajax({
+				url:"ajax.php",
+				method:"post",
+				data:{
+					"target":"spouseFormSubmit",
+					"data":form_data
+				},
+				success:function(res) {
+					var response = JSON.parse(res);
+					if(response.error == 0){
+						$("#spouseModel").modal("hide");
+					}
+					else{
+						messagevalidation(response.data);
+					}
+				}
+			});
+		});
+
+		$(".rotarianDesignation").on("change",function(){
+			var val = $(this).val();
+			console.log(val);
+			if(val == 'Others'){
+				var dataElement = $(this).closest("td");
+				dataElement.html("<input type='text' class ='form-control textBox'>");
+			}
+		});
+
+
 	});
 
 	function calculateMemberRegistrationFee() {
@@ -502,10 +633,27 @@ $rotaryClubList = getRotaryClubs();
 		});
 	}
 
-	function getRotarianHTML(count, designation) {
+	function resetSpouseForm(){
+		$("#rotarian_id").val("");
+		$("#spouse_name").val("");
+		$("#spouse_dob").val("");
+		$("#rotarion_dob").val("");
+		$("#wedding_anniversary").val("");
+		$("#spouse_phone").val("");
+		$("#spouse_email").val("");
+	}
+
+	function getRotarianHTML(count, data = []) {
+		var rotarianOptionsHTML = "<option value =''>~~~ Select Rotarian ~~~</option>";
+		$.each(optionsvalues,function(index,value) {
+			rotarianOptionsHTML += "<option value='"+value.key+"'>"+value.value+"</option>";
+		});
+		optionsHTML = rotarianOptionsHTML;
+
 		rotarianRowHtml = "<tr>\
 							<th scope='row'>" + count + "</th>\
 							<td>\
+								<input type='hidden' name='team_member_id[]' id='team_member_id_" + count + "' class='team_member_id'>\
 								<select style='width: 100%' name ='rotarianSearch[]' id='rotarianSearch_" + count + "' class='rotarianSearch form-select'>" + optionsHTML;
 
 		/*$.each(optionsvalues,function(index,value) {
@@ -514,21 +662,27 @@ $rotaryClubList = getRotaryClubs();
 
 		rotarianRowHtml += "</select>\
 						</td>\
-						<td><input type='text' class='form-control textBox' name='rotarian_call_name[]'id='rotarian_call_name" + count + "'></td>\
-						<td>\
-						<div class='form-check'>\
-						<input class='form-check-input' type='radio' name='rotarian_checkVeg_" + count + "' value='1' id='rotarian_checkVeg" + count + "' checked>\
-						<label class='form-check-label' for='rotarian_checkVeg" + count + "'>Veg</label>\
-						</div>\
-						<div class='form-check'>\
-						<input class='form-check-input' type='radio' name='rotarian_checkVeg_" + count + "' value='2' id='rotarian_checkNonVeg" + count + "' >\
-						<label class='form-check-label' for='rotarian_checkNonVeg" + count + "'>Non-Veg</label>\
-						</div>\
-						</td>\
+						<td><input class='form-control form-control-sm' style='inline-size: fit-content;' type='file' name='rotarion_image[]' id='rotarian_image_" + count + "' accept='image/*'></td>\
+						<td><input type='text' class='club_name form-control textBox disabled' name='rotarian_clubName[]'id='rotarian_club_name" + count + "'></td>\
+						<td><input type='text' class='rotarian_call_name form-control textBox disabled' name='rotarian_call_name[]'id='rotarian_call_name" + count + "'></td>\
 						<td><input type='text' class='mobile form-control textBox' name='rotarian_mobile[]'id='rotarian_mobile" + count + "'></td>\
-						<td class='designation'><input type='text' class='form-control textBox disabled' name='rotarian_designation[]'id='rotarian_designation" + count + "' value = '" + designation + "'></td>\
-						<td><select style='width: auto' name ='rotarianCollarSize[]' id='rotarianCollarSize_" + count + "' class='rotarianCollarSize form-select'>" + collar_size+"</select></td>\
-						</tr>";
+						<td class='designation'>\
+						<select style='width: 100%' name ='rotarian_designation[]' id='rotarian_designation" + count + "' class='rotarianDesignation form-select'>\
+						<option value='0'>~~Select~~</option>\
+						<option value='Chairperson'>Chairperson</option>\
+						<option value='Associate Chairperson'>Associate Chairperson</option>\
+						<option value='Addl Chairperson'>Addl Chairperson</option>\
+						<option value='Mentor'>Mentor</option>\
+						<option value='Advisor'>Advisor</option>\
+						<option value='Member'>Member</option>\
+						<option value='Secretary'>Secretary</option>\
+						<option value='Treasurer'>Treasurer</option>\
+						<option value='Others'>Others</option>\
+						</select>\
+						<td class='classfication'><input type='text' class='form-control textBox' name='rotarian_classfication[]'  id='rotarian_classfication" + count + "'/></td>\
+						";
+		rotarianRowHtml +="<td><div><a href='#' class='editSpouseDetails'><i class='fa fa-address-book-o' aria-hidden='true'></i></a></div></td>";
+		rotarianRowHtml +="</tr>"
 		return rotarianRowHtml;
 	}
 
@@ -580,8 +734,8 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 	}*/
 
 	function resetRotarian() {
-		$(".rotarianSearch").change(function() {
-
+		$(".rotarianSearch").on("change",function() {
+			console.log("Ajay Member Change Event")
 			calculateMemberRegistrationFee();
 			var rotarianMemberId = $(this).val();
 			var element = $(this);
@@ -598,9 +752,10 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 					var response = JSON.parse(res);
 					if (response.status = "success") {
 						var data = response.data;
-						// console.log(data.mobile_no);
 
 						element.closest("tr").find(".mobile").val(data.mobile_no);
+						element.closest("tr").find(".club_name").val(data.club_name);
+						element.closest("tr").find(".rotarian_call_name").val(data.email_address);
 
 					}
 				}
@@ -616,51 +771,69 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 
 
 	}
-
-
-
 	$(document).ready(function() {
 		var rotarianTableElement = $("#rotarianTable");
 		var annTableElement = $("#annTable");
+		var rotarianTeamDetails =<?php echo json_encode($rotarian_team_details["data"]); ?>;
+		var data = [];
+		if(rotarianTeamDetails.status == "success"){
+			data = rotarianTeamDetails;
+		}
+		resetRotarian();
 		// var annetteTableElement = $("#annetteTable");
-		var designation = {
-			1: "President",
-			2: "Secretary",
-			3: "Treasurer",
-			4: "Dir.-Club Service",
-			5: "Dir.-Vocational Service",
-			6: "Dir.-Comm Development",
-			7: "Dir.Comm Health",
-			8: "Dir.Youth Service",
-			9: "Dir.Int. Service",
-			10: "Chair-Mem. Development",
-			11: "Chair-Foundation",
-			12: "Chair-DEI",
-			13: "Chair-Public Image",
-			14: "Sergeant at Arms"
-		}
-		for (var key in designation) {
-			if (designation.hasOwnProperty(key)) {
-				rotarianTableElement.find('tbody').append(getRotarianHTML(key, designation[key]));
+		
+	    var existTeamCount = $(rotarianTeamDetails).length;
+	    console.log(rotarianTeamDetails);
+	    // if(existTeamCount > 0){
 
-				/*annetteTableElement.find('tbody').append(getAnnetteHTML(annetteRowCount));*/
-				rotarianRowCount++;
+	    	// $("#rotaryClubListSearch").val(rotarianTeamDetails[0].team_id).trigger("change");
+	    	/*for(var col in rotarianTeamDetails){
+	    		if (rotarianTeamDetails.hasOwnProperty(col)) {
+	    			var index = rotarianRowCount;
+	    			rotarianTableElement.find('tbody').append(getRotarianHTML(index));
+	    			$("#rotarianSearch_"+index).val(rotarianTeamDetails[col].member_id).trigger("change");	
+	    			$("#rotarian_club_name"+index).val(rotarianTeamDetails[col].club_name).trigger("change");
+	    			$("#rotarian_call_name"+index).val(rotarianTeamDetails[col].email_address).trigger("change");
+	    			$("#rotarian_mobile"+index).val(rotarianTeamDetails[col].phone_number).trigger("change");
+	    			$("#rotarian_designation"+index).val(rotarianTeamDetails[col].member_designation).trigger("change");
+	    			$("#rotarian_classfication"+index).val(rotarianTeamDetails[col].classfication).trigger("change");
+	    			$("#team_member_id_"+index).val(rotarianTeamDetails[col].id).trigger("change");
+	    			rotarianRowCount++;
+	    		}
+	    	}*/
+	    // }else{
+	    	for (var key in designation) {
+				if (designation.hasOwnProperty(key)) {
+					rotarianTableElement.find('tbody').append(getRotarianHTML(key));
+					/*annetteTableElement.find('tbody').append(getAnnetteHTML(annetteRowCount));*/
+					rotarianRowCount++;
 
-				/*annetteRowCount++;*/
+					/*annetteRowCount++;*/
+				}
 			}
-		}
-		for (var i = 4; i >= 0; i--) {
+	    // }
+
+		
+
+		if (data.hasOwnProperty(0)) {
+	       /*
+        	$("#rotarianSearch_"+key).val(data[row].member_id).trigger("change");
+     		$("#rotarian_classfication"+key).val(data[row].classfication);*/
+	    }
+
+		/*for (var i = 4; i >= 0; i--) {
 			annTableElement.find('tbody').append(getAnnHTML(annRowCount));
 			annRowCount++;
-		}
-		/*$('.rotarianSearch').select2();*/
+		}*/
+		$('.rotarianSearch').select2();
 		$('.rotaryClubListSearch').select2();
+		$('.rotarianDesignation').select2();
 		/*$('.registerer_club').select2();
 		$('.registerer_name').select2();*/
 		/*$('.rotarianCollarSize').select2();
 		$('.annCollarSize').select2();*/
-		resetRotarian();
-
+		
+		
 	});
 	$("#add-rotrain").click(function() {
 		var rotarianTableElement = $("#rotarianTable");

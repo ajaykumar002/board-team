@@ -1,10 +1,51 @@
 var optionsHTML = "";
+var data = userEnteredData;
 
+var designation = {
+			1: "President",
+			2: "Secretary",
+			3: "Treasurer",
+			4: "Dir.-Club Service",
+			5: "Dir.-Vocational Service",
+			6: "Dir.-Comm Development",
+			7: "Dir.Comm Health",
+			8: "Dir.Youth Service",
+			9: "Dir.Int. Service",
+			10: "Chair-Mem. Development",
+			/*11: "Chair-Foundation",
+			12: "Chair-DEI",
+			13: "Chair-Public Image",
+			14: "Sergeant at Arms"*/
+		}
 
 $("#rotaryClubListSearch").change(function(){
+
+	for (var key in designation) {
+			if (designation.hasOwnProperty(key)) {
+				for(var row in data){
+					if(data.hasOwnProperty(row)){
+						if( data[row].member_designation == designation[key]){
+							$("#rotarianSearch_"+key).val(data[row].member_id).trigger("change");
+							console.log(data[row].member_id);
+     						$("#rotarian_classfication"+key).val(data[row].classfication);
+						}
+					}
+				}
+			}
+		}
 	var club = $(this).val();
+	var rotarianTableElement = $("#rotarianTable");
+	rotarionHtml ="";
+	rotarianRowCount =1
+	for(var i =0; i<10;i++){
+		rotarionHtml +=getRotarianHTML(rotarianRowCount);
+		rotarianRowCount++;
+	}
+	rotarianTableElement.find('tbody').html(rotarionHtml);
+	$('.rotarianSearch').select2();
+	$('.rotarianDesignation').select2();
 	
-	$.ajax({
+	/*$.ajax({
 		url:"ajax.php",
 		method:"post",
 		data:{
@@ -26,7 +67,7 @@ $("#rotaryClubListSearch").change(function(){
 				$('.registerer_name').select2();
 			}
 		}
-	});
+	});*/
 });
 
 /*$("#registerer_club").change(function(){
@@ -139,6 +180,9 @@ function clearErrors() {
 	$(".error").remove();
 }
 
-
-
-
+function toast(message) {
+	var x = document.getElementById("snackbar");
+	$("#snackbar").html(message);
+  	x.className = "show";
+  	setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
