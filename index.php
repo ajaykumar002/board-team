@@ -524,89 +524,7 @@ $rotaryTeamsList = getRotaryTeams();
 	});
 
 	$(document).on("ready",function(){
-		$(".editSpouseDetails").on("click",function(e){
-			e.preventDefault();
-			var rotarianValue = $(this).closest("tr").find(".rotarianSearch").val();
-
-			if(rotarianValue == ""){
-				alert("Select member "+($(this).closest("tr").find(".rotarianDesignation").val()));
-			}else{
-				resetSpouseForm();
-				clearErrors();
-				$("#spouseModel").modal("show");
-				$("#rotarian_id").val(rotarianValue)
-
-				$.ajax({
-					url:"ajax.php",
-					method:"post",
-					data:{
-						"target":"spouseFormDetails",
-						"data":{
-							"value":rotarianValue
-						}
-					},
-					success:function(res){
-
-						var response = JSON.parse(res);
-						if(response.status == "success"){
-							var data = response.data
-							$("#spouse_name").val(data.spouse_name);
-							$("#spouse_dob").val(data.spouse_dob);
-							$("#rotarion_dob").val(data.member_dob);
-							$("#wedding_anniversary").val(data.wedding_anniversary);
-							$("#spouse_phone").val(data.spouse_phone);
-							$("#spouse_email").val(data.spouse_email);
-						}
-						
-					}
-					
-				});
-			}
-			
-		});
-
-		$(".modalCloseBtn").on("click",function(){
-			$("#spouseModel").modal("hide");
-		});
-
-		$("#spouseForm").on("click",function(){
-			var form_data = {
-				"rotarian_id":$("#rotarian_id").val(),
-				"spouse_name":$("#spouse_name").val(),
-				"spouse_dob":$("#spouse_dob").val(),
-				"rotarion_dob":$("#rotarion_dob").val(),
-				"wedding_anniversary":$("#wedding_anniversary").val(),
-				"spouse_phone":$("#spouse_phone").val(),
-				"spouse_email":$("#spouse_email").val()
-			};
-
-			$.ajax({
-				url:"ajax.php",
-				method:"post",
-				data:{
-					"target":"spouseFormSubmit",
-					"data":form_data
-				},
-				success:function(res) {
-					var response = JSON.parse(res);
-					if(response.error == 0){
-						$("#spouseModel").modal("hide");
-					}
-					else{
-						messagevalidation(response.data);
-					}
-				}
-			});
-		});
-
-		$(".rotarianDesignation").on("change",function(){
-			var val = $(this).val();
-			if(val == 'Others'){
-				var dataElement = $(this).closest("td");
-				dataElement.html("<input type='text' class ='form-control textBox'>");
-			}
-		});
-
+		
 
 	});
 
@@ -759,6 +677,90 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 			});
 		});
 
+		$(".editSpouseDetails").on("click",function(e){
+			e.preventDefault();
+			var rotarianValue = $(this).closest("tr").find(".rotarianSearch").val();
+
+			if(rotarianValue == ""){
+				alert("Select member "+($(this).closest("tr").find(".rotarianDesignation").val()));
+			}else{
+				resetSpouseForm();
+				clearErrors();
+				$("#spouseModel").modal("show");
+				$("#rotarian_id").val(rotarianValue)
+
+				$.ajax({
+					url:"ajax.php",
+					method:"post",
+					data:{
+						"target":"spouseFormDetails",
+						"data":{
+							"value":rotarianValue
+						}
+					},
+					success:function(res){
+
+						var response = JSON.parse(res);
+						if(response.status == "success"){
+							var data = response.data
+							$("#spouse_name").val(data.spouse_name);
+							$("#spouse_dob").val(data.spouse_dob);
+							$("#rotarion_dob").val(data.member_dob);
+							$("#wedding_anniversary").val(data.wedding_anniversary);
+							$("#spouse_phone").val(data.spouse_phone);
+							$("#spouse_email").val(data.spouse_email);
+						}
+						
+					}
+					
+				});
+			}
+			
+		});
+
+		$(".modalCloseBtn").on("click",function(){
+			$("#spouseModel").modal("hide");
+		});
+
+		$("#spouseForm").on("click",function(){
+			var form_data = {
+				"rotarian_id":$("#rotarian_id").val(),
+				"spouse_name":$("#spouse_name").val(),
+				"spouse_dob":$("#spouse_dob").val(),
+				"rotarion_dob":$("#rotarion_dob").val(),
+				"wedding_anniversary":$("#wedding_anniversary").val(),
+				"spouse_phone":$("#spouse_phone").val(),
+				"spouse_email":$("#spouse_email").val()
+			};
+
+			$.ajax({
+				url:"ajax.php",
+				method:"post",
+				data:{
+					"target":"spouseFormSubmit",
+					"data":form_data
+				},
+				success:function(res) {
+					var response = JSON.parse(res);
+					if(response.error == 0){
+						$("#spouseModel").modal("hide");
+					}
+					else{
+						messagevalidation(response.data);
+					}
+				}
+			});
+		});
+
+		$(".rotarianDesignation").on("change",function(){
+			var val = $(this).val();
+			if(val == 'Others'){
+				var dataElement = $(this).closest("td");
+				dataElement.html("<input type='text' class ='form-control textBox'>");
+			}
+		});
+
+
 		$(".ann_name").on("change", function() {
 			calculateMemberRegistrationFee();
 		});
@@ -824,6 +826,7 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 		$('.rotarianSearch').select2();
 		$('.rotaryClubListSearch').select2();
 		$('.rotarianDesignation').select2();
+		resetRotarian();
 		/*$('.registerer_club').select2();
 		$('.registerer_name').select2();*/
 		/*$('.rotarianCollarSize').select2();

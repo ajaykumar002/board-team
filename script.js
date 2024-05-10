@@ -42,6 +42,7 @@ $("#rotaryClubListSearch").change(function(){
 				}
 				rotarianTableElement.find('tbody').html(rotarionHtml);
 				image();
+				resetRotarian();
 				$('.rotarianSearch').select2();
 				$('.rotarianDesignation').select2();
 		    	for(var col in data){
@@ -67,6 +68,7 @@ $("#rotaryClubListSearch").change(function(){
 				}
 				rotarianTableElement.find('tbody').html(rotarionHtml);
 				image();
+				resetRotarian();
 				$('.rotarianSearch').select2();
 				$('.rotarianDesignation').select2();
 	    	}
