@@ -252,12 +252,11 @@
 				spouse_dob ='".$data['spouse_dob']."',
 				member_dob ='".$data['rotarion_dob']."',
 				wedding_anniversary = '".$data['wedding_anniversary']."',
-				spouse_email = '".$data['spouse_email']."',
 				spouse_phone = '".$data['spouse_phone']."'
 			WHERE member_id = '".$data['rotarian_id']."'";
 		}else{
 
-	    	$sql = "INSERT INTO rotary_spouse_details (member_id, spouse_name,spouse_dob, member_dob, wedding_anniversary, spouse_email,spouse_phone) VALUES ('".$data['rotarian_id']."','".$data['spouse_name']."','".$data['spouse_dob']."','".$data['rotarion_dob']."','".$data['wedding_anniversary']."','".$data['spouse_email']."','".$data['spouse_phone']."')";
+	    	$sql = "INSERT INTO rotary_spouse_details (member_id, spouse_name,spouse_dob, member_dob, wedding_anniversary,spouse_phone) VALUES ('".$data['rotarian_id']."','".$data['spouse_name']."','".$data['spouse_dob']."','".$data['rotarion_dob']."','".$data['wedding_anniversary']."','".$data['spouse_phone']."')";
 		}
 		
 	    if ($GLOBALS['conn']->query($sql) !== TRUE) {

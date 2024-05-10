@@ -347,7 +347,6 @@ $rotaryTeamsList = getRotaryTeams();
 										<th scope="col">Name</th>
 										<th scope="col">Photo</th>
 										<th scope="col">Club Name</th>
-										<th scope="col">E-Mail</th>
 										<th scope="col">Mobile</th>
 										<th scope="col">Designation</th>
 										<th scope="col">Classfication</th>
@@ -460,10 +459,6 @@ $rotaryTeamsList = getRotaryTeams();
 	        					<label for="spouse_phone" class="required">Phone</label>
 	        					<input type="text" class="form-control" name="spouse_phone" id="spouse_phone">
 	        				</div>
-	        				<div class="form-group col-lg-6 col-12">
-	        					<label for="spouse_email" class="required">Email</label>
-	        					<input type="email" class="form-control" name="spouse_email" id="spouse_email">
-	        				</div>
 	        			</div>
 	        		</form>
 	      		</div>
@@ -556,7 +551,6 @@ $rotaryTeamsList = getRotaryTeams();
 		$("#rotarion_dob").val("");
 		$("#wedding_anniversary").val("");
 		$("#spouse_phone").val("");
-		$("#spouse_email").val("");
 	}
 
 	function getRotarianHTML(count, data = []) {
@@ -579,9 +573,10 @@ $rotaryTeamsList = getRotaryTeams();
 		rotarianRowHtml += "</select>\
 						</td>\
 						<td><input class='form-control form-control-sm rotarion_image' style='inline-size: fit-content;' type='file' name='rotarion_image[]' id='rotarian_image_" + count + "' accept='image/*'></td>\
-						<td><input type='text' class='club_name form-control textBox disabled' name='rotarian_clubName[]'id='rotarian_club_name" + count + "'></td>\
-						<td><input type='text' class='rotarian_call_name form-control textBox disabled' name='rotarian_call_name[]'id='rotarian_call_name" + count + "'></td>\
-						<td><input type='text' class='mobile form-control textBox' name='rotarian_mobile[]'id='rotarian_mobile" + count + "'></td>\
+						<td><input type='text' class='club_name form-control textBox disabled' name='rotarian_clubName[]'id='rotarian_club_name" + count + "'></td>";
+		/*rotarianRowHtml +="<td><input type='text' class='rotarian_call_name form-control textBox disabled' name='rotarian_call_name[]'id='rotarian_call_name" + count + "'></td>"; */
+
+		rotarianRowHtml +="<td><input type='text' class='mobile form-control textBox' name='rotarian_mobile[]'id='rotarian_mobile" + count + "'></td>\
 						<td class='designation'>\
 						<select style='width: 100%' name ='rotarian_designation[]' id='rotarian_designation" + count + "' class='rotarianDesignation form-select'>\
 						<option value='0'>~~Select~~</option>\
@@ -708,7 +703,6 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 							$("#rotarion_dob").val(data.member_dob);
 							$("#wedding_anniversary").val(data.wedding_anniversary);
 							$("#spouse_phone").val(data.spouse_phone);
-							$("#spouse_email").val(data.spouse_email);
 						}
 						
 					}
@@ -729,8 +723,7 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 				"spouse_dob":$("#spouse_dob").val(),
 				"rotarion_dob":$("#rotarion_dob").val(),
 				"wedding_anniversary":$("#wedding_anniversary").val(),
-				"spouse_phone":$("#spouse_phone").val(),
-				"spouse_email":$("#spouse_email").val()
+				"spouse_phone":$("#spouse_phone").val()
 			};
 
 			$.ajax({
@@ -746,6 +739,7 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 						$("#spouseModel").modal("hide");
 					}
 					else{
+						clearErrors();
 						messagevalidation(response.data);
 					}
 				}

@@ -251,7 +251,6 @@
 			"rotarian_id" =>"notnull",
 			"rotarion_dob"=>"notnull",
 			"spouse_dob"=>"notnull",
-			"spouse_email"=>"notnull",
 			"spouse_name"=>"notnull",
 			"spouse_phone"=>"notnull",
 			"wedding_anniversary" =>"notnull"
