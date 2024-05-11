@@ -286,7 +286,7 @@ $rotaryTeamsList = getRotaryTeams();
 			<img class="logo" src="DistrictThemeLogo.svg">
 		</div>
 		<div>
-			<h3>RID 3234 District Directory Details</h3>
+			<h3>Registration form Sangamam to Directory Details</h3>
 		</div>
 
 		<!--Waves Container-->
