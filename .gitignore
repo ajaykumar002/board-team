@@ -5,3 +5,5 @@ node_modules/*
 vendor
 composer.lock
 db.php
+log
+log/*
