@@ -158,7 +158,9 @@
 				
 				$image = $rotarion_image;
 				$targetFile = $target_dir . basename($image["name"][$i]);
-				move_uploaded_file($image["tmp_name"][$i], $targetFile);
+				if(basename($image["name"][$i]) != ""){
+					move_uploaded_file($image["tmp_name"][$i], $targetFile);
+				}
 				
 				$rotariansDetails[] = [
 					"team_id" => $team_id,

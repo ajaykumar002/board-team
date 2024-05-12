@@ -96,6 +96,10 @@
 			if($row['team_member_id'] == ""){
 				$sql =" INSERT INTO rotary_team_members (team_id, member_id, member_designation, creator_mobile, classfication,file_name,file_path) VALUES ('".$row['team_id']."','".$row['member_id']."','".$row['member_designation']."','".$row['creator_mobile']."','".$row['classfication']."','".$row['file_name']."','".$row['file_path']."')";
 			}else{
+				$fileSQL =" ";
+				if($row['file_name'] != ""){
+					$fileSQL = ",file_name = '".$row['file_name']."',file_path = '".$row['file_path']."'";
+				}
 				$sql = "
 					UPDATE rotary_team_members SET
 					team_id = '".$row['team_id']."',
@@ -103,9 +107,7 @@
 					classfication = '".$row['classfication']."',
 					member_designation = '".$row['member_designation']."',
 					creator_mobile = '".$row['creator_mobile']."',
-					file_name = '".$row['file_name']."',
-					file_path = '".$row['file_path']."',
-					date_madified = '".date('Y-m-d H:i:s')."'
+					date_madified = '".date('Y-m-d H:i:s')."'".$fileSQL."
 					WHERE id = '".$row['team_member_id']."'
 				";
 			}
