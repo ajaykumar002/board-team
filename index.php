@@ -845,6 +845,7 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 		rotarianTableElement.find('tbody').append(getRotarianHTML(rotarianRowCount));
 		rotarianRowCount++;
 		resetRotarian();
+		image();
 		$('.rotarianSearch').select2();
 	});
 
