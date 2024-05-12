@@ -338,7 +338,7 @@ $rotaryTeamsList = getRotaryTeams();
 						</li>
  -->					</ul>
 
-					<div class="tab-content" id="myTabContent" style="overflow:auto">
+					<div class="tab-content" id="myTabContent" style="overflow:auto;zoom: 67%;">
 						<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 							<table class="table table-bordered table-hover" id="rotarianTable">
 								<thead>
