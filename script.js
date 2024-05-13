@@ -185,8 +185,9 @@ $("#rotarianRegister").on("submit",function(e){
 				var rotarianErrors = response.data.rotarian;
 				var annErrors = response.data.ann;
 				var annetteErrors = response.data.annette;
-				if( Object.keys(transactionErrors).length > 0 )
-					messagevalidation(transactionErrors);
+				var teamErrors = response.data.team;
+				if( Object.keys(teamErrors).length > 0 )
+					messagevalidation(teamErrors);
 
 				if( Object.keys(annErrors).length > 0 )
 					messagevalidation(annErrors);

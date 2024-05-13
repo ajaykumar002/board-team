@@ -661,7 +661,8 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 				success: function(res) {
 					var response = JSON.parse(res);
 					if (response.status = "success") {
-						var data = response.data;						element.closest("tr").find(".mobile").val(data.mobile_no);
+						var data = response.data;
+						element.closest("tr").find(".mobile").val(data.mobile_no);
 						element.closest("tr").find(".club_name").val(data.club_name);
 						element.closest("tr").find(".rotarian_call_name").val(data.email_address);
 						element.closest("tr").find(".rotarian_classfication").val(data.classification);

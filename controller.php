@@ -105,7 +105,9 @@
 				"rotarian_designation" => "string",
 				"rotarian_classfication" => "string"
 			];
-			// message(json_encode($rotarion_image));
+			$teamValidationRule = [
+				"rotaryClubListSearch" => "notnull"
+			];
 			/*$annValidationRule = [
 				"ann_name" => "string",
 				"ann_call_name" =>"string",
@@ -130,15 +132,17 @@
 			// ];
 			// $transactionValidateResult = validateFormData($transactionData,$transactionValidateRule);
 			$rotariansValidateResult = validateFormData($formData,$rotarianValidationRule);
+			$teamValidateResult = validateFormData($formData,$teamValidationRule);
 			// $annValidateResult = validateFormData($formData,$annValidationRule);
 			/*$annetteValidateResult = validateFormData($formData,$annetteValidationRule);*/
 
-			if(($rotariansValidateResult["error"]==1) || ($annValidateResult["error"] == 1) || ($annetteValidateResult["error"] == 1)||$transactionValidateResult['error'] == 1){
+			if(($rotariansValidateResult["error"]==1) || ($teamValidateResult["error"]==1)||($annValidateResult["error"] == 1) || ($annetteValidateResult["error"] == 1)||$transactionValidateResult['error'] == 1){
 				$validateErrors = [
 					"rotarian" => $rotariansValidateResult["data"],
 					"ann" => $annValidateResult["data"],
 					"annette" => $annetteValidateResult["data"],
-					"transaction" => $transactionValidateResult["data"]
+					"transaction" => $transactionValidateResult["data"],
+					"team" => $teamValidateResult["data"]
 				];
 				return array("error" => 1,"message"=> "Invalid data.", "data" => $validateErrors);
 			}else{
