@@ -590,7 +590,7 @@ $rotaryTeamsList = getRotaryTeams();
 						<option value='Treasurer'>Treasurer</option>\
 						<option value='Others'>Others</option>\
 						</select>\
-						<td class='classfication'><input type='text' class='form-control textBox' name='rotarian_classfication[]'  id='rotarian_classfication" + count + "'/></td>\
+						<td class='classfication'><input type='text' class='form-control textBox rotarian_classfication' name='rotarian_classfication[]'  id='rotarian_classfication" + count + "'/></td>\
 						";
 		rotarianRowHtml +="<td><div><a href='#' class='editSpouseDetails'><i class='fa fa-address-book-o' aria-hidden='true'></i></a></div></td>";
 		rotarianRowHtml +="</tr>"
@@ -661,11 +661,10 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 				success: function(res) {
 					var response = JSON.parse(res);
 					if (response.status = "success") {
-						var data = response.data;
-
-						element.closest("tr").find(".mobile").val(data.mobile_no);
+						var data = response.data;						element.closest("tr").find(".mobile").val(data.mobile_no);
 						element.closest("tr").find(".club_name").val(data.club_name);
 						element.closest("tr").find(".rotarian_call_name").val(data.email_address);
+						element.closest("tr").find(".rotarian_classfication").val(data.classification);
 
 					}
 				}

@@ -56,8 +56,8 @@ $("#rotaryClubListSearch").change(function(){
 		    			$("#rotarian_designation"+index).val(data[col].member_designation).trigger("change");
 		    			$("#rotarian_classfication"+index).val(data[col].classfication).trigger("change");
 		    			$("#team_member_id_"+index).val(data[col].id).trigger("change");
+		    			$("#rotarian_classfication"+index).val(data[col].classfication).trigger("change");
 		    			if(data[col].file_name){
-		    				console.log(data[col].file_name);
 		    				var fileHtml = "<span>Photo Already Uploaded <a href='"+data[col].file_path+"' target='blank'>View Image</a></span>";
 		    				$("#rotarian_image_"+index).closest("td").append(fileHtml);
 		    			}

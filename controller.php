@@ -85,7 +85,8 @@
 				"mobile_no" => $data['phone_number'],
 				"club_name" => $data['club_name'],
 				"email_address" => $data['email_address'],
-				"rotary_member_id" => $data["rotary_member_id"]
+				"rotary_member_id" => $data["rotary_member_id"],
+				"classification" => $data["classfication"]
 			];
 			return $data;
 		} catch (Exception $e) {
