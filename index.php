@@ -439,15 +439,32 @@ $rotaryTeamsList = getRotaryTeams();
 	        					<label for="spouse_name" class="required">Name</label>
 	        					<input type="text" class="form-control" name="spouse_name" id="spouse_name">
 	        				</div>
-	        				<div class="form-group col-lg-6 col-12">
-	        					<label for="spouse_dob" class="required">DOB</label>
-	        					<input type="date" class="form-control" name="spouse_dob" id="spouse_dob">
+	        				<div class="col-lg-6 col-12">
+	        					<label class="required">DOB</label>
+	        					<div class="row">
+	        						<div class="form-group col-lg-5 col-5">
+		        						<input type="number" class="form-control" name="spouse_dob_month" id="spouse_dob_month" placeholder="MM" min="1" max="12">
+	        						</div>
+	        						<div class="form-group col-lg-2 col-2"><span class="form-control">/</span></div>
+	        						<div class="form-group col-lg-5 col-5">
+	        							<input type="number" class="form-control" name="spouse_dob_day" id="spouse_dob_day" placeholder="DD" min="1" max="31">
+	        						</div>
+	        					</div>
+	        					
 	        				</div>
 	        			</div>
 	        			<div class="row">
 	        				<div class="form-group  col-lg-6 col-12">
 	        					<label for="rotarion_dob" class="required">Rotarion DOB</label>
-	        					<input type="date" class="form-control" name="rotarion_dob" id="rotarion_dob">
+	        					<div class="row">
+	        						<div class="form-group col-lg-5 col-5">
+		        						<input type="number" class="form-control" name="rotarion_dob_month" id="rotarion_dob_month" placeholder="MM" min="1" max="12">
+	        						</div>
+	        						<div class="form-group col-lg-2 col-2"><span class="form-control">/</span></div>
+	        						<div class="form-group col-lg-5 col-5">
+	        							<input type="number" class="form-control" name="rotarion_dob_day" id="rotarion_dob_day" placeholder="DD" min="1" max="31">
+	        						</div>
+	        					</div>
 	        				</div>
 	        				<div class="form-group col-lg-6 col-12">
 	        					<label for="wedding_anniversary" class="required">Wedding Anniversary</label>
@@ -488,10 +505,13 @@ $rotaryTeamsList = getRotaryTeams();
 						<option value='6'>2XL/44</option>\
 						<option value='7'>3XL/46</option>\
 						<option value='8'>4XL/48</option>";
-	$(document).ready(function() {
+	$(document).ready(function(){
 		$('.required').append("<span class='required-color'>*</span>");
 
-		
+		$('#spouseModel').modal({
+	        backdrop: 'static',
+	        keyboard: false
+	    });
 		clearErrors();
 		/*$.ajax({
 			url:"ajax.php",
@@ -519,7 +539,34 @@ $rotaryTeamsList = getRotaryTeams();
 	});
 
 	$(document).on("ready",function(){
-		
+		$('#spouse_dob_day').on('input', function () {
+            if ($(this).val() < 1) {
+                $(this).val(1);
+            } else if ($(this).val() > 31) {
+                $(this).val(31);
+            }
+        });
+        $('#spouse_dob_month').on('input', function () {
+            if ($(this).val() < 1) {
+                $(this).val(1);
+            } else if ($(this).val() > 12) {
+                $(this).val(12);
+            }
+        });
+        $('#rotarion_dob_month').on('input', function () {
+            if ($(this).val() < 1) {
+                $(this).val(1);
+            } else if ($(this).val() > 12) {
+                $(this).val(12);
+            }
+        });
+        $('#rotarion_dob_day').on('input', function () {
+            if ($(this).val() < 1) {
+                $(this).val(1);
+            } else if ($(this).val() > 31) {
+                $(this).val(31);
+            }
+        });
 
 	});
 
@@ -681,6 +728,9 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 			}else{
 				resetSpouseForm();
 				clearErrors();
+				$("body").css({
+					"zoom":"100%"
+				});
 				$("#spouseModel").modal("show");
 				$("#rotarian_id").val(rotarianValue)
 
@@ -699,8 +749,10 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 						if(response.status == "success"){
 							var data = response.data
 							$("#spouse_name").val(data.spouse_name);
-							$("#spouse_dob").val(data.spouse_dob);
-							$("#rotarion_dob").val(data.member_dob);
+							$("#spouse_dob_day").val(data.spouse_dob_day);
+							$("#spouse_dob_month").val(data.spouse_dob_month);
+							$("#rotarion_dob_day").val(data.member_dob_day);
+							$("#rotarion_dob_month").val(data.member_dob_month);
 							$("#wedding_anniversary").val(data.wedding_anniversary);
 							$("#spouse_phone").val(data.spouse_phone);
 						}
@@ -713,15 +765,33 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 		});
 
 		$(".modalCloseBtn").on("click",function(){
+			$("body").css({
+				"zoom":"67%"
+			});
 			$("#spouseModel").modal("hide");
 		});
 
 		$("#spouseForm").on("click",function(){
+			var spouse_dob_month = $("#spouse_dob_month").val()
+			var spouse_dob_day = $("#spouse_dob_day").val()
+			var spouse_dob = `${spouse_dob_month}-${spouse_dob_day}`
+
+			var rotarion_dob_month = $("#rotarion_dob_month").val()
+			var rotarion_dob_day = $("#rotarion_dob_day").val()
+			var rotarion_dob = `${rotarion_dob_month}-${rotarion_dob_day}`
+
+
+			console.log(`${spouse_dob_month}-${spouse_dob_day}`)
+
 			var form_data = {
 				"rotarian_id":$("#rotarian_id").val(),
 				"spouse_name":$("#spouse_name").val(),
-				"spouse_dob":$("#spouse_dob").val(),
-				"rotarion_dob":$("#rotarion_dob").val(),
+				"spouse_dob":spouse_dob,
+				"spouse_dob_day":$("#spouse_dob_day").val(),
+				"spouse_dob_month":$("#spouse_dob_month").val(),
+				"rotarion_dob":rotarion_dob,
+				"rotarion_dob_day":$("#rotarion_dob_day").val(),
+				"rotarion_dob_month":$("#rotarion_dob_month").val(),
 				"wedding_anniversary":$("#wedding_anniversary").val(),
 				"spouse_phone":$("#spouse_phone").val()
 			};

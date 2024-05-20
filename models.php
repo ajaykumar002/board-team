@@ -251,14 +251,16 @@
 			$sql = "UPDATE rotary_spouse_details 
 			SET 
 				spouse_name='".$data['spouse_name']."',
-				spouse_dob ='".$data['spouse_dob']."',
-				member_dob ='".$data['rotarion_dob']."',
+				spouse_dob_day ='".$data['spouse_dob_day']."',
+				spouse_dob_month ='".$data['spouse_dob_month']."',
+				member_dob_day ='".$data['rotarion_dob_day']."',
+				member_dob_month ='".$data['rotarion_dob_month']."',
 				wedding_anniversary = '".$data['wedding_anniversary']."',
 				spouse_phone = '".$data['spouse_phone']."'
 			WHERE member_id = '".$data['rotarian_id']."'";
 		}else{
 
-	    	$sql = "INSERT INTO rotary_spouse_details (member_id, spouse_name,spouse_dob, member_dob, wedding_anniversary,spouse_phone) VALUES ('".$data['rotarian_id']."','".$data['spouse_name']."','".$data['spouse_dob']."','".$data['rotarion_dob']."','".$data['wedding_anniversary']."','".$data['spouse_phone']."')";
+	    	$sql = "INSERT INTO rotary_spouse_details (member_id, spouse_name,spouse_dob_day, spouse_dob_month, member_dob_day, member_dob_month, wedding_anniversary,spouse_phone) VALUES ('".$data['rotarian_id']."','".$data['spouse_name']."','".$data['spouse_dob_day']."','".$data['spouse_dob_month']."','".$data['rotarion_dob_day']."','".$data['rotarion_dob_month']."','".$data['wedding_anniversary']."','".$data['spouse_phone']."')";
 		}
 		
 	    if ($GLOBALS['conn']->query($sql) !== TRUE) {

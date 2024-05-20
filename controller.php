@@ -256,8 +256,10 @@
 	function saveSpouseFormData($data){
 		$validationRule = [
 			"rotarian_id" =>"notnull",
-			"rotarion_dob"=>"notnull",
-			"spouse_dob"=>"notnull",
+			"rotarion_dob_month"=>"notnull",
+			"rotarion_dob_day"=>"notnull",
+			"spouse_dob_month"=>"notnull",
+			"spouse_dob_day"=>"notnull",
 			"spouse_name"=>"notnull",
 			"spouse_phone"=>"notnull",
 			"wedding_anniversary" =>"notnull"
