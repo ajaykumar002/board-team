@@ -261,8 +261,8 @@
 			"spouse_dob_month"=>"notnull",
 			"spouse_dob_day"=>"notnull",
 			"spouse_name"=>"notnull",
-			"spouse_phone"=>"notnull",
-			"wedding_anniversary" =>"notnull"
+			"wedding_anniversary_day" =>"notnull",
+			"wedding_anniversary_month" =>"notnull"
 		];
 
 		$validationResult = validateFormData($data,$validationRule);

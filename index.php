@@ -468,12 +468,21 @@ $rotaryTeamsList = getRotaryTeams();
 	        				</div>
 	        				<div class="form-group col-lg-6 col-12">
 	        					<label for="wedding_anniversary" class="required">Wedding Anniversary</label>
-	        					<input type="date" class="form-control" name="wedding_anniversary" id="wedding_anniversary">
+	        					<div class="row">
+	        						<div class="form-group col-lg-5 col-5">
+		        						<input type="number" class="form-control" name="wedding_anniversary_month" id="wedding_anniversary_month" placeholder="MM" min="1" max="12">
+	        						</div>
+	        						<div class="form-group col-lg-2 col-2"><span class="form-control">/</span></div>
+	        						<div class="form-group col-lg-5 col-5">
+	        							<input type="number" class="form-control" name="wedding_anniversary_day" id="wedding_anniversary_day" placeholder="DD" min="1" max="31">
+	        						</div>
+	        					</div>
+	        					<!-- <input type="date" class="form-control" name="wedding_anniversary" id="wedding_anniversary"> -->
 	        				</div>
 	        			</div>
 	        			<div class="row">
 	        				<div class="form-group col-lg-6 col-12">
-	        					<label for="spouse_phone" class="required">Phone</label>
+	        					<label for="spouse_phone">Phone</label>
 	        					<input type="text" class="form-control" name="spouse_phone" id="spouse_phone">
 	        				</div>
 	        			</div>
@@ -594,9 +603,12 @@ $rotaryTeamsList = getRotaryTeams();
 	function resetSpouseForm(){
 		$("#rotarian_id").val("");
 		$("#spouse_name").val("");
-		$("#spouse_dob").val("");
-		$("#rotarion_dob").val("");
-		$("#wedding_anniversary").val("");
+		$("#spouse_dob_day").val("");
+		$("#spouse_dob_month").val("");
+		$("#rotarion_dob_day").val("");
+		$("#rotarion_dob_month").val("");
+		$("#wedding_anniversary_day").val("");
+		$("#wedding_anniversary_month").val("");
 		$("#spouse_phone").val("");
 	}
 
@@ -749,11 +761,42 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 						if(response.status == "success"){
 							var data = response.data
 							$("#spouse_name").val(data.spouse_name);
-							$("#spouse_dob_day").val(data.spouse_dob_day);
-							$("#spouse_dob_month").val(data.spouse_dob_month);
-							$("#rotarion_dob_day").val(data.member_dob_day);
-							$("#rotarion_dob_month").val(data.member_dob_month);
-							$("#wedding_anniversary").val(data.wedding_anniversary);
+							if(data.spouse_dob_day > 0){
+								$("#spouse_dob_day").val(data.spouse_dob_day);
+							}
+							else{
+								$("#spouse_dob_day").val("");
+							}
+							if(data.spouse_dob_month > 0){
+								$("#spouse_dob_month").val(data.spouse_dob_month);
+							}
+							else{
+								$("#spouse_dob_month").val("");
+							}
+							if(data.member_dob_day > 0){
+								$("#rotarion_dob_day").val(data.member_dob_day);
+							}
+							else{
+								$("#rotarion_dob_day").val("");
+							}
+							if(data.member_dob_month > 0){
+								$("#rotarion_dob_month").val(data.member_dob_month);
+							}
+							else{
+								$("#rotarion_dob_month").val("");
+							}
+							if(data.wedding_anniversary_day > 0){
+								$("#wedding_anniversary_day").val(data.wedding_anniversary_day);
+							}
+							else{
+								$("#wedding_anniversary_day").val("");
+							}
+							if(data.wedding_anniversary_month > 0){
+								$("#wedding_anniversary_month").val(data.wedding_anniversary_month);
+							}
+							else{
+								$("#wedding_anniversary_month").val("");
+							}
 							$("#spouse_phone").val(data.spouse_phone);
 						}
 						
@@ -780,9 +823,6 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 			var rotarion_dob_day = $("#rotarion_dob_day").val()
 			var rotarion_dob = `${rotarion_dob_month}-${rotarion_dob_day}`
 
-
-			console.log(`${spouse_dob_month}-${spouse_dob_day}`)
-
 			var form_data = {
 				"rotarian_id":$("#rotarian_id").val(),
 				"spouse_name":$("#spouse_name").val(),
@@ -792,7 +832,8 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 				"rotarion_dob":rotarion_dob,
 				"rotarion_dob_day":$("#rotarion_dob_day").val(),
 				"rotarion_dob_month":$("#rotarion_dob_month").val(),
-				"wedding_anniversary":$("#wedding_anniversary").val(),
+				"wedding_anniversary_day":$("#wedding_anniversary_day").val(),
+				"wedding_anniversary_month":$("#wedding_anniversary_month").val(),
 				"spouse_phone":$("#spouse_phone").val()
 			};
 
@@ -806,7 +847,11 @@ for='annetteCheckVeg"+count+"'>Veg</label>\
 				success:function(res) {
 					var response = JSON.parse(res);
 					if(response.error == 0){
+						$("body").css({
+							"zoom":"67%"
+						});
 						$("#spouseModel").modal("hide");
+						alert("Spouse details successfully updated!");
 					}
 					else{
 						clearErrors();
